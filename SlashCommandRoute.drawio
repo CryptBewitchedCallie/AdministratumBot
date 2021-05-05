@@ -1,6 +1,6 @@
-<mxfile modified="2021-05-04T11:31:35.715Z" host="app.diagrams.net" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36" etag="I3PrP9CeqvUv44hvPhvO" version="14.6.9" type="github">
+<mxfile modified="2021-05-05T15:53:51.728Z" host="app.diagrams.net" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36" etag="hlR6Zw6fFXDEQg-xtdRD" version="14.6.9" type="github">
   <diagram id="Ht1M8jgEwFfnCIfOTk4-" name="Page-1">
-    <mxGraphModel dx="1182" dy="772" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+    <mxGraphModel dx="1038" dy="548" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -21,12 +21,12 @@
         <mxCell id="Fiv4lahHjwLAKPsO6Myc-1" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn4.iconfinder.com/data/icons/logos-brands-5/24/postman-128.png" vertex="1" parent="1">
           <mxGeometry x="330" y="20" width="88" height="88" as="geometry" />
         </mxCell>
-        <mxCell id="Fiv4lahHjwLAKPsO6Myc-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="Fiv4lahHjwLAKPsO6Myc-2" target="Fiv4lahHjwLAKPsO6Myc-27">
+        <mxCell id="Fiv4lahHjwLAKPsO6Myc-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.25;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Fiv4lahHjwLAKPsO6Myc-2" target="Fiv4lahHjwLAKPsO6Myc-28">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="720" y="292" as="targetPoint" />
+            <mxPoint x="694.8" y="254" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="Fiv4lahHjwLAKPsO6Myc-6" value="slash command goes to...?" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Fiv4lahHjwLAKPsO6Myc-5">
+        <mxCell id="Fiv4lahHjwLAKPsO6Myc-6" value="Interaction forwarded to gateway" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="Fiv4lahHjwLAKPsO6Myc-5">
           <mxGeometry x="-0.1629" relative="1" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
@@ -143,14 +143,14 @@
         <mxCell id="Fiv4lahHjwLAKPsO6Myc-21" value="" style="html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];shape=mxgraph.kubernetes.icon;prIcon=user" vertex="1" parent="1">
           <mxGeometry x="40" y="340" width="110" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="Fiv4lahHjwLAKPsO6Myc-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="Fiv4lahHjwLAKPsO6Myc-27" target="Fiv4lahHjwLAKPsO6Myc-28">
+        <mxCell id="Fiv4lahHjwLAKPsO6Myc-35" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="Fiv4lahHjwLAKPsO6Myc-28" target="Fiv4lahHjwLAKPsO6Myc-34">
           <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="Fiv4lahHjwLAKPsO6Myc-27" value="" style="shape=image;html=1;verticalAlign=top;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;imageAspect=0;aspect=fixed;image=https://cdn4.iconfinder.com/data/icons/evil-icons-user-interface/64/question-128.png" vertex="1" parent="1">
-          <mxGeometry x="694.8" y="190" width="128" height="128" as="geometry" />
         </mxCell>
         <mxCell id="Fiv4lahHjwLAKPsO6Myc-28" value="" style="points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;gradientColor=#945DF2;gradientDirection=north;fillColor=#5A30B5;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;" vertex="1" parent="1">
           <mxGeometry x="880" y="203.5" width="101" height="101" as="geometry" />
+        </mxCell>
+        <mxCell id="Fiv4lahHjwLAKPsO6Myc-34" value="" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.lambda_function;fillColor=#F58534;gradientColor=none;" vertex="1" parent="1">
+          <mxGeometry x="1430" y="204" width="69" height="72" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
