@@ -7,8 +7,17 @@ from nacl.exceptions import BadSignatureError
 PUBLIC_KEY = os.environ['PUBLIC_KEY']
 WEBHOOK = os.environ['WEBHOOK']
 APP_ID = os.environ['APP_ID']
+S3_BUCKET = os.environ['S3_BUCKET']
 PING_PONG = {"type": 1}
 RESPONSE_TYPES =  { 
+                    "PONG": 1, 
+                    "ACK_NO_SOURCE": 2, 
+                    "MESSAGE_NO_SOURCE": 3, 
+                    "MESSAGE_WITH_SOURCE": 4, 
+                    "ACK_WITH_SOURCE": 5
+                  }
+                  
+IMAGE_FILES =  { 
                     "PONG": 1, 
                     "ACK_NO_SOURCE": 2, 
                     "MESSAGE_NO_SOURCE": 3, 
@@ -64,13 +73,14 @@ def lambda_handler(event, context):
     ack_object = json.dumps({"type": 4, "data":{"content":"instruction received!"}}) .encode('utf-8')
     r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
     
+    #find the file to pick up
+    command = body['data']['name']
+    
     #send the webhook
     blep_object = json.dumps({
         "username": "administratum_test",
         "avatar_url": "https://logos-download.com/wp-content/uploads/2016/02/warhammer-40000-and_bird_logo.png",
-        "embeds":[
-        {"image":{"url":"https://dtrpg-public-files.s3.us-east-2.amazonaws.com/images/54/65872.jpg"}}
-        ]
+        "embeds":[{"image":{"url":f"https://{S3_BUCKET}.s3-eu-west-1.amazonaws.com/Resources/{command}.PNG"}}]
         }).encode('utf-8')
     r = http.request('POST', WEBHOOK, headers={'Content-Type': 'application/json'}, body=blep_object)
    
