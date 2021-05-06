@@ -2,6 +2,7 @@ import os
 import json
 import urllib3
 from nacl.signing import VerifyKey
+from nacl.signing import BadSignatureError
 
 PUBLIC_KEY = os.environ['PUBLIC_KEY']
 WEBHOOK = os.environ['WEBHOOK']
@@ -47,7 +48,7 @@ def lambda_handler(event, context):
     # verify the signature
     try:
         verify_signature(event)
-    except Exception as e:
+    except BadSignatureError as e:
         print("not authorized")
         return {
               "isBase64Encoded": False,
