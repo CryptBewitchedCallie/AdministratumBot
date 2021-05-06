@@ -5,15 +5,16 @@ import boto3
 import urllib3
 import time
 
-#import environment variables
+# import environment variables
 S3_BUCKET = os.environ['S3_BUCKET']
 APPLICATION_ID = os.environ['APPLICATION_ID']
 BOT_TOKEN = os.environ['BOT_TOKEN']
-#initialise global variables/resources
+# initialise global variables/resources
 http = urllib3.PoolManager()
 slash_url = f"https://discord.com/api/v8/applications/{APPLICATION_ID}/commands"
 slash_headers = {'Content-Type': 'application/json', 'Authorization': f'Bot {BOT_TOKEN}'}
-slash_responses = [200,201] #acceptable HTTP responses
+slash_responses = [200, 201]  # acceptable HTTP responses
+
 
 def create_slash_command(slash_object):
     slasher = re.search('Resources/(.+?).PNG', slash_object.get('Key'))
@@ -23,17 +24,18 @@ def create_slash_command(slash_object):
             "description": f"display the {slasher.group(1)} chart"
             }).encode('utf-8')
         r = http.request('POST', slash_url, headers=slash_headers, body=slash_command)
-        if (r.status == 429): #rate limited, initiate a wait:
+        if r.status == 429:  # rate limited, initiate a wait:
             print("rate limited, waiting 15 seconds")
             time.sleep(15)
             r = http.request('POST', slash_url, headers=slash_headers, body=slash_command)
-        if (r.status not in slash_responses): #any reposnse but "created" or "ok"
+        if r.status not in slash_responses:  # any response but "created" or "ok"
             print(slash_command)
             print(r.status)
             print(r.data)
             raise urllib3.exceptions.HTTPError
         print(f"{slasher.group(1)} created")
-        time.sleep(3) # found we were hitting it too hard, slow down!
+        time.sleep(3)  # found we were hitting it too hard, slow down!
+
 
 def lambda_handler(event, context):
     client = boto3.client("s3")
