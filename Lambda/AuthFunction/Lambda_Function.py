@@ -2,7 +2,6 @@ import os
 import json
 import boto3
 from nacl.signing import VerifyKey
-from nacl.signing import BadSignatureError
 
 PUBLIC_KEY = os.environ['PUBLIC_KEY']
 NEXT_LAMBDA = os.environ['NEXT_LAMBDA']
@@ -38,7 +37,7 @@ def call_next_lambda(event):
     client.invoke(
         FunctionName=NEXT_LAMBDA,
         InvocationType="Event",
-        Payload=event
+        Payload=json.dumps(event).encode('utf8')
     )
 
 
@@ -47,7 +46,7 @@ def lambda_handler(event, context):
     # verify the signature
     try:
         verify_signature(event)
-    except BadSignatureError as e:
+    except Exception as e:
         print("not authorized")
         return {
               "isBase64Encoded": False,
