@@ -104,7 +104,7 @@ Resources:
     Properties:
       Description: Funcion that registers slash commands based on the S3 bucket's Resources directory
       Handler: populate_commands.lambda_handler
-      CodeUri: Lambda/Resource/Function/
+      CodeUri: Lambda/ResourcesFunction/
       Environment:
         Variables:
           APP_ID: !Ref GLOBAL_APP_ID
