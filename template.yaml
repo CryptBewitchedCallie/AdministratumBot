@@ -3,9 +3,13 @@ Transform: AWS::Serverless-2016-10-31
 Description: 'SAM template Administratum Discord bot
 
   '
+# standard Lambda settings
 Globals:
   Function:
     Timeout: 900
+    MemorySize: 128
+    Runtime: python3.8
+# define environment variables
 Parameters:
   GLOBAL_APP_ID:
     Type: "String"
@@ -15,41 +19,116 @@ Parameters:
     Type: "String"
     Default: "administratum-test"
     Description: Enter the name of the S3 bucket within your account where the Resources directory exists
+  GLOBAL_PUBLIC_KEY:
+    Type: "String"
+    Default: "710a049def70ed79178b8367a96b571be2d5fad8b5559742931b602fe327eb0d"
+    Description: Enter the public key generated within the Discord developer portal for your application
+  GLOBAL_BOT_TOKEN:
+    Type: "String"
+    Default: "ODM4ODI5MTIwMDUyOTIwNDMw.YJAyfg.8CfPjB24lL4xiMO7eAxGul3IK_Y"
+    Description: Enter the token generated within the Discord developer portal for your bot
+  GLOBAL_WEBHOOK_NAME:
+    Type: "String"
+    Default: "ADMINISTRATUM"
+    Description: Enter the name your webhooks should be posted as
+  GLOBAL_WEBHOOK_AVATAR:
+    Type: "String"
+    Default: "https://logos-download.com/wp-content/uploads/2016/02/warhammer-40000-and_bird_logo.png"
+    Description: Enter the avatar image url your webhook should use
 
+# The API gateway setup that Discord will talk to
 Resources:
+  AdministratumAPIGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: test
+
+# Lambda setup sections
+  PyNaClLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: PyNaCL layer to allow verification of the signature supplied by Discord
+      CompatibleRuntimes: [python3.8]
+      ContentUri: Lambda/AuthFunction/pynacl-layer.zip
+      LayerName: pynacl
+
   AuthFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: Funcion that authenticates (or rejects) the message sent from Discord
       Handler: Lambda_Function.lambda_handler
-      Runtime: python3.8
       CodeUri: Lambda/AuthFunction/
+      Layers: !Ref PyNaClLayer
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /Administratum
+            Method: post
+            RestApiId: !Ref AdministratumAPIGateway
       Environment:
         Variables:
-          APP_ID:
-            Ref: GLOBAL_APP_ID
-          S3_BUCKET:
-            Ref: GLOBAL_S3_BUCKET
+          PUBLIC_KEY: !Ref GLOBAL_PUBLIC_KEY
+          NEXT_LAMBDA: !Ref GetWebhookFunction
+
   GetWebhookFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: Funcion that identifies the appropriate webhook URL for the message
       Handler: Lambda_Function.lambda_handler
-      Runtime: python3.8
       CodeUri: Lambda/GetWebhookFunction/
       Environment:
         Variables:
-          APP_ID:
-            Ref: GLOBAL_APP_ID
-          S3_BUCKET:
-            Ref: GLOBAL_S3_BUCKET
+          APP_ID: !Ref GLOBAL_APP_ID
+          PUBLIC_KEY: !Ref GLOBAL_PUBLIC_KEY
+          WEBHOOK_NAME: !Ref GLOBAL_WEBHOOK_NAME
+          WEBHOOK_AVATAR: !Ref GLOBAL_WEBHOOK_AVATAR
+          BOT_TOKEN: !Ref GLOBAL_BOT_TOKEN
+          NEXT_LAMBDA: !Ref SendWebhookFunction
+
   SendWebhookFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Description: Funcion that sends the requested webhook to the channel
       Handler: Lambda_Function.lambda_handler
-      Runtime: python3.8
       CodeUri: Lambda/SendWebhookFunction/
+      Environment:
+        Variables:
+          APP_ID: !Ref GLOBAL_APP_ID
+          S3_BUCKET: !Ref GLOBAL_S3_BUCKET
+
+  RegisterResourceFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: Funcion that registers slash commands based on the S3 bucket's Resources directory
+      Handler: populate_commands.lambda_handler
+      CodeUri: Lambda/Resource/Function/
       Environment:
         Variables:
           APP_ID:
             Ref: GLOBAL_APP_ID
+          BOT_TOKEN:
+            Ref: GLOBAL_BOT_TOKEN
           S3_BUCKET:
             Ref: GLOBAL_S3_BUCKET
+
+# S3 resource setup (bucket and policy)
+  S3ResourceStorage:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref GLOBAL_S3_BUCKET
+  S3ResourcePolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref GLOBAL_S3_BUCKET
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:GetObject'
+            Effect: Allow
+            Resource: !Join
+              - ''
+              - - 'arn:aws:s3:::'
+                - !Ref S3ResourceStorage
+                - /Resources/*
+            Principal: '*'

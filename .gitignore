@@ -2,4 +2,6 @@
 Resources/
 # AWS SAM builds etc. that are produced on local runs
 .aws-sam/build/
+# Local settings
+.idea/
 

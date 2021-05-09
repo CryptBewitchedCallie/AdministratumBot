@@ -36,11 +36,25 @@ def call_next_lambda(event):
     )
 
 
+def ack_interaction(body):
+    # acknowledge the interaction
+    print(body)
+    interaction_id = body.get('id')
+    interaction_token = body.get('token')
+    response_url = f"https://discord.com/api/v8/interactions/{interaction_id}/{interaction_token}/callback"
+    ack_object = json.dumps({"type": 4, "data": {"content": "instruction received!"}}) .encode('utf-8')
+    r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
+    print(r.data)
+
+
 def lambda_handler(event, context):
     print(f"event {event}")  # debug print
 
     body = json.loads(event.get('body'))
     channel_id = body.get('channel_id')
+
+    # Acknowledge the interaction to say we're working on things
+    ack_interaction(body)
 
     # Ask if there are existing webhooks
     webhook_url = f"https://discord.com/api/v8/channels/{channel_id}/webhooks"

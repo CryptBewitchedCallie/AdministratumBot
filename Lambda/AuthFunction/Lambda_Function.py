@@ -1,10 +1,14 @@
 import os
 import json
 import boto3
+import urllib3
 from nacl.signing import VerifyKey
 
+# environment variables
 PUBLIC_KEY = os.environ['PUBLIC_KEY']
 NEXT_LAMBDA = os.environ['NEXT_LAMBDA']
+# global variables
+http = urllib3.PoolManager()
 PING_PONG = {"type": 1}
 RESPONSE_TYPES = {
                     "PONG": 1,
@@ -30,6 +34,17 @@ def ping_pong(body):
     if body.get("type") == 1:
         return True
     return False
+
+
+def ack_interaction(body):
+    # acknowledge the interaction
+    print(body)
+    interaction_id = body.get('id')
+    interaction_token = body.get('token')
+    response_url = f"https://discord.com/api/v8/interactions/{interaction_id}/{interaction_token}/callback"
+    ack_object = json.dumps({"type": 4, "data": {"content": "instruction received, processing request"}}) .encode('utf-8')
+    r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
+    print(r.data)
 
 
 def call_next_lambda(event):
@@ -62,9 +77,11 @@ def lambda_handler(event, context):
     if ping_pong(body):
         return PING_PONG
 
-    # for anything else call the next function, and while that's running respond that all's ok
+    # for anything else acknowledge the interaction...
+    ack_interaction(body)
+    # ... call the next function...
     call_next_lambda(event)
-
+    # ... and while that's running respond that all's ok
     # API call complete
     return {
               "isBase64Encoded": False,
