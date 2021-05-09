@@ -70,7 +70,7 @@ Resources:
             RestApiId: !Ref AdministratumAPIGateway
       Environment:
         Variables:
-          PUBLIC_KEY: "GLOBALPUBLICKEY"
+          PUBLIC_KEY: GLOBALPUBLICKEY
           NEXT_LAMBDA: !Ref GetWebhookFunction
 
   GetWebhookFunction:
@@ -81,11 +81,11 @@ Resources:
       CodeUri: Lambda/GetWebhookFunction/
       Environment:
         Variables:
-          APP_ID: "GLOBALAPPID"
-          PUBLIC_KEY: "GLOBALPUBLICKEY"
-          WEBHOOK_NAME: "GLOBALWEBHOOKNAME"
-          WEBHOOK_AVATAR: "GLOBALWEBHOOKAVATAR"
-          BOT_TOKEN: "GLOBALBOTTOKEN"
+          APP_ID: GLOBALAPPID
+          PUBLIC_KEY: GLOBALPUBLICKEY
+          WEBHOOK_NAME: GLOBALWEBHOOKNAME
+          WEBHOOK_AVATAR: GLOBALWEBHOOKAVATAR
+          BOT_TOKEN: GLOBALBOTTOKEN
           NEXT_LAMBDA: !Ref SendWebhookFunction
 
   SendWebhookFunction:
@@ -96,8 +96,8 @@ Resources:
       CodeUri: Lambda/SendWebhookFunction/
       Environment:
         Variables:
-          APP_ID: "GLOBALAPPID"
-          S3_BUCKET: "GLOBALS3BUCKET"
+          APP_ID: GLOBALAPPID
+          S3_BUCKET: GLOBALS3BUCKET
 
   RegisterResourceFunction:
     Type: AWS::Serverless::Function
@@ -107,19 +107,19 @@ Resources:
       CodeUri: Lambda/ResourcesFunction/
       Environment:
         Variables:
-          APP_ID: "GLOBALAPPID"
-          BOT_TOKEN: "GLOBALBOTTOKEN"
-          S3_BUCKET: "GLOBALS3BUCKET"
+          APP_ID: GLOBALAPPID
+          BOT_TOKEN: GLOBALBOTTOKEN
+          S3_BUCKET: GLOBALS3BUCKET
 
 # S3 resource setup (bucket and policy)
   S3ResourceStorage:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: "GLOBALS3BUCKET"
+      BucketName: GLOBALS3BUCKET
   S3ResourcePolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: "GLOBALS3BUCKET"
+      Bucket: GLOBALS3BUCKET
       PolicyDocument:
         Statement:
           - Action:
