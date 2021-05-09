@@ -1,0 +1,7 @@
+ version=0.1
+
+ [default.deploy.parameters]
+ stack_name = "administratum-stack"
+ s3_bucket = "administratum-test"
+ region = "eu-west-1"
+ confirm_changeset = true
