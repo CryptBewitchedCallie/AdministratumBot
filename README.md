@@ -16,7 +16,7 @@ Requirements: AWS SAM CLI, Application and Bot registered in Discord
 
 This application is deployed via the template.yaml file in the root folder. 
 
-Before deploying update the Parameters section with the required values for your deployment. This will require having already registered the application and bot with Discord via the Developer portal in order to generate the appropriate IDs, keys, etc.
+Before deploying update the Parameters section with the required values for your deployment. It is recommended that you define these in the AWS System Manager SSM initially. This will require having already registered the application and bot with Discord via the Developer portal in order to generate the appropriate IDs, keys, etc.
 
 Then I guess there's a magic button you press somewhere? 
 
