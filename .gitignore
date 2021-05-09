@@ -1,2 +1,5 @@
+# Resources are specific to the project and shouldn't need to be version controlled
+Resources/
+# AWS SAM builds etc. that are produced on local runs
+.aws-sam/build/
 
-*.PNG
