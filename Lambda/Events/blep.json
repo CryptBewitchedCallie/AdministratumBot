@@ -1,0 +1,39 @@
+{
+  "version": "2.0",
+  "routeKey": "POST /Administratum",
+  "rawPath": "/test/Administratum",
+  "rawQueryString": "",
+  "headers": {
+    "accept": "*/*",
+    "content-length": "754",
+    "content-type": "application/json",
+    "host": "qwks05ekrf.execute-api.eu-west-1.amazonaws.com",
+    "user-agent": "Discord-Interactions/1.0 (+https://discord.com)",
+    "x-amzn-trace-id": "Root=1-60953f73-7ea72dc762b9c6161d11788e",
+    "x-forwarded-for": "35.227.62.178",
+    "x-forwarded-port": "443",
+    "x-forwarded-proto": "https",
+    "x-signature-ed25519": "7840a622a1eb5cdcfced8633f0266212b6ef4b672ff1c1ac29b79e76667339590f320ffaa565a8578d74c65f231a07cbc0917c9fdcc1b72a68706378e28c5a04",
+    "x-signature-timestamp": "1620393843"
+  },
+  "requestContext": {
+    "accountId": "117473867983",
+    "apiId": "qwks05ekrf",
+    "domainName": "qwks05ekrf.execute-api.eu-west-1.amazonaws.com",
+    "domainPrefix": "qwks05ekrf",
+    "http": {
+      "method": "POST",
+      "path": "/test/Administratum",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "35.227.62.178",
+      "userAgent": "Discord-Interactions/1.0 (+https://discord.com)"
+    },
+    "requestId": "e9baEhbSjoEEPpQ=",
+    "routeKey": "POST /Administratum",
+    "stage": "test",
+    "time": "07/May/2021:13:24:03 +0000",
+    "timeEpoch": 1620393843581
+  },
+  "body": "{\"application_id\":\"838829120052920430\",\"channel_id\":\"838805524812267582\",\"data\":{\"id\":\"839767552414318602\",\"name\":\"blep\"},\"guild_id\":\"838805524186529793\",\"id\":\"840217419057332235\",\"member\":{\"deaf\":false,\"is_pending\":false,\"joined_at\":\"2021-05-03T15:53:41.346000+00:00\",\"mute\":false,\"nick\":null,\"pending\":false,\"permissions\":\"17179869183\",\"premium_since\":null,\"roles\":[],\"user\":{\"avatar\":\"2be595a6902e878b887cfec70626bef7\",\"discriminator\":\"4276\",\"id\":\"185807570450120704\",\"public_flags\":0,\"username\":\"Callie\"}},\"token\":\"aW50ZXJhY3Rpb246ODQwMjE3NDE5MDU3MzMyMjM1OjlSbUhZUmxLdzJ6bzFoZDh2YkJkRVJCTnhjS3BLTTBXek9RWks5N25KeGhxZDBwNGkydjJuZEpTaGQySVo5eFZ2VWVHQzV0b2N6TEVwNWtGS2dvM205NnpxVFRuQTk3ZWtZSnRTV09IeFd3Q2RiRzZYZmcwY1lndjRVTnJSdnEw\",\"type\":2,\"version\":1}",
+  "isBase64Encoded": false
+}
