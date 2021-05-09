@@ -4,5 +4,5 @@ version = 0.1
  stack_name = "administratum-stack"
  s3_bucket = "administratum-test"
  region = "eu-west-1"
- confirm_changeset = true
+ confirm_changeset = false
  capabilities = "CAPABILITY_IAM"
