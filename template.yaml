@@ -29,7 +29,7 @@ Parameters:
     Description: Enter the token generated within the Discord developer portal for your bot
   GLOBALWEBHOOKNAME:
     Type: "String"
-    Default: "administratum"
+    Default: "ADMINISTRATUM"
     Description: Enter the name your webhooks should be posted as
   GLOBALWEBHOOKAVATAR:
     Type: "String"
@@ -51,6 +51,10 @@ Resources:
       CompatibleRuntimes:
         - python3.8
       ContentUri: Lambda/AuthFunction/pynacl-layer.zip
+      Content:
+        S3Bucket:
+          Ref: GLOBALS3BUCKET
+        S3Key: Layers/pynacl-layer.zip
       LayerName: pynacl
 
   AuthFunction:
