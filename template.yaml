@@ -36,6 +36,25 @@ Parameters:
     Default: "https://logos-download.com/wp-content/uploads/2016/02/warhammer-40000-and_bird_logo.png"
     Description: Enter the avatar image url your webhook should use
 
+# S3 resource setup (bucket and policy)
+  S3ResourceStorage:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Ref: GLOBALS3BUCKET
+  S3ResourcePolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: GLOBALS3BUCKET
+      PolicyDocument:
+        Statement:
+          - Action:
+              - 's3:GetObject'
+            Effect: Allow
+            Resource: !Join ["", ["arn:aws:s3:::", !Ref S3ResourceStorage, "/Resources/*"]]
+            Principal: '*'
+
 # The API gateway setup that Discord will talk to
 Resources:
   AdministratumAPIGateway:
@@ -51,10 +70,6 @@ Resources:
       CompatibleRuntimes:
         - python3.8
       ContentUri: /Lambda/AuthFunction/pynacl-layer.zip
-      Content:
-        S3Bucket:
-          Ref: GLOBALS3BUCKET
-        S3Key: Layers/pynacl-layer.zip
       LayerName: pynacl
 
   AuthFunction:
@@ -128,21 +143,3 @@ Resources:
           S3_BUCKET:
             Ref: GLOBALS3BUCKET
 
-# S3 resource setup (bucket and policy)
-  S3ResourceStorage:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName:
-        Ref: GLOBALS3BUCKET
-  S3ResourcePolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket:
-        Ref: GLOBALS3BUCKET
-      PolicyDocument:
-        Statement:
-          - Action:
-              - 's3:GetObject'
-            Effect: Allow
-            Resource: !Join ["", ["arn:aws:s3:::", !Ref S3ResourceStorage, "/Resources/*"]]
-            Principal: '*'
