@@ -36,7 +36,12 @@ Parameters:
     Default: "https://logos-download.com/wp-content/uploads/2016/02/warhammer-40000-and_bird_logo.png"
     Description: Enter the avatar image url your webhook should use
 
-# S3 resource setup (bucket and policy)
+
+
+# The API gateway setup that Discord will talk to
+Resources:
+
+  # S3 resource setup (bucket and policy)
   S3ResourceStorage:
     Type: AWS::S3::Bucket
     Properties:
@@ -52,25 +57,15 @@ Parameters:
           - Action:
               - 's3:GetObject'
             Effect: Allow
-            Resource: !Join ["", ["arn:aws:s3:::", !Ref S3ResourceStorage, "/Resources/*"]]
+            Resource: !Join [ "", [ "arn:aws:s3:::", !Ref S3ResourceStorage, "/Resources/*" ] ]
             Principal: '*'
 
-# The API gateway setup that Discord will talk to
-Resources:
   AdministratumAPIGateway:
     Type: AWS::Serverless::Api
     Properties:
       StageName: test
 
 # Lambda setup sections
-  PyNaClLayer:
-    Type: AWS::Serverless::LayerVersion
-    Properties:
-      Description: PyNaCL layer to allow verification of the signature supplied by Discord
-      CompatibleRuntimes:
-        - python3.8
-      ContentUri: Lambda/AuthFunction/pynacl-layer.zip
-      LayerName: pynacl
 
   AuthFunction:
     Type: AWS::Serverless::Function
@@ -93,6 +88,16 @@ Resources:
             Ref: GLOBALPUBLICKEY
           NEXT_LAMBDA:
             Ref: GetWebhookFunction
+
+  PyNaClLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      Description: PyNaCL layer to allow verification of the signature supplied by Discord
+      CompatibleRuntimes:
+        - python3.8
+      ContentUri: Lambda/AuthFunction/Layers/pynacl-layer.zip
+      LayerName: pynacl
+      RetentionPolicy: Retain
 
   GetWebhookFunction:
     Type: AWS::Serverless::Function
