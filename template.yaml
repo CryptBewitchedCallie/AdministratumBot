@@ -69,7 +69,7 @@ Resources:
       Description: PyNaCL layer to allow verification of the signature supplied by Discord
       CompatibleRuntimes:
         - python3.8
-      ContentUri: /Lambda/AuthFunction/pynacl-layer.zip
+      ContentUri: Lambda/AuthFunction/pynacl-layer.zip
       LayerName: pynacl
 
   AuthFunction:
@@ -77,7 +77,7 @@ Resources:
     Properties:
       Description: Funcion that authenticates (or rejects) the message sent from Discord
       Handler: Lambda_Function.lambda_handler
-      CodeUri: /Lambda/AuthFunction/
+      CodeUri: Lambda/AuthFunction/
       Layers:
         - !Ref PyNaClLayer
       Events:
@@ -99,7 +99,7 @@ Resources:
     Properties:
       Description: Funcion that identifies the appropriate webhook URL for the message
       Handler: Lambda_Function.lambda_handler
-      CodeUri: /Lambda/GetWebhookFunction/
+      CodeUri: Lambda/GetWebhookFunction/
       Environment:
         Variables:
           APP_ID:
@@ -120,7 +120,7 @@ Resources:
     Properties:
       Description: Funcion that sends the requested webhook to the channel
       Handler: Lambda_Function.lambda_handler
-      CodeUri: /Lambda/SendWebhookFunction/
+      CodeUri: Lambda/SendWebhookFunction/
       Environment:
         Variables:
           APP_ID:
@@ -133,7 +133,7 @@ Resources:
     Properties:
       Description: Funcion that registers slash commands based on the S3 bucket's Resources directory
       Handler: populate_commands.lambda_handler
-      CodeUri: /Lambda/ResourcesFunction/
+      CodeUri: Lambda/ResourcesFunction/
       Environment:
         Variables:
           APP_ID:
