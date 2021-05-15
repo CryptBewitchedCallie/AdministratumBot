@@ -44,7 +44,6 @@ def ack_interaction(body):
     response_url = f"https://discord.com/api/v8/interactions/{interaction_id}/{interaction_token}/callback"
     ack_object = json.dumps({"type": 4, "data": {"content": "instruction received, processing request"}}) .encode('utf-8')
     r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
-    print(r.data)
 
 
 def call_next_lambda(event):

@@ -38,13 +38,13 @@ def call_next_lambda(event):
 
 def ack_interaction(body):
     # acknowledge the interaction
-    print(body)
+    print(f"body {body}")
     interaction_id = body.get('id')
     interaction_token = body.get('token')
     response_url = f"https://discord.com/api/v8/interactions/{interaction_id}/{interaction_token}/callback"
     ack_object = json.dumps({"type": 4, "data": {"content": "instruction received!"}}) .encode('utf-8')
     r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
-    print(r.data)
+    print(f"response data {r.data}")
 
 
 def lambda_handler(event, context):
@@ -69,9 +69,10 @@ def lambda_handler(event, context):
     webhook_token = ''
     webhook_id = ''
     for webhook in json.loads(r.data.decode('utf-8')):
-        if (webhook.get('application_id') == APP_ID and webhook.get('channel_id') == channel_id):
-            webhook_token = webhook.get('token')
-            webhook_id = webhook.get('id')
+        webhook_object = json.loads(webhook)
+        if (webhook_object.get('application_id') == APP_ID and webhook_object.get('channel_id') == channel_id):
+            webhook_token = webhook_object.get('token')
+            webhook_id = webhook_object.get('id')
 
     # create webhook URL from the response
     webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{webhook_token}"
