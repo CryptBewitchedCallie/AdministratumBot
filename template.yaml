@@ -128,7 +128,8 @@ Resources:
   S3ResourceStorage:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: GLOBALS3BUCKET
+      BucketName:
+        Ref: GLOBALS3BUCKET
   S3ResourcePolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
