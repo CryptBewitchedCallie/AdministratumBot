@@ -42,7 +42,7 @@ def ack_interaction(body):
     interaction_id = body.get('id')
     interaction_token = body.get('token')
     response_url = f"https://discord.com/api/v8/interactions/{interaction_id}/{interaction_token}/callback"
-    ack_object = json.dumps({"type": 4, "data": {"content": "instruction received, processing request"}}) .encode('utf-8')
+    ack_object = json.dumps({"type": 5, "data": {"content": "instruction received, processing request"}}) .encode('utf-8')
     r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
 
 
@@ -65,18 +65,22 @@ def lambda_handler(event, context):
         return {
               "isBase64Encoded": False,
               "statusCode": 401,
-              "body": "[UNAUTHORIZED] Invalid request signature!",
-              "headers": {
-                "content-type": "application/json"
-              }
+              "body": "[UNAUTHORIZED] Invalid request signature!"
             }
 
     # check if message is a ping
     body = json.loads(event.get('body'))
     if ping_pong(body):
-        return PING_PONG
+        return {
+              "isBase64Encoded": False,
+              "statusCode": 200,
+              "headers": {
+                "content-type": "application/json"
+              },
+              "body": "{\"type\": 1}"
+            }
 
-    # for anything else acknowledge the interaction...
+    # for anything else acknowledge the interaction and tell it we're working on the request...
     ack_interaction(body)
     # ... call the next function...
     call_next_lambda(event)
@@ -85,8 +89,8 @@ def lambda_handler(event, context):
     return {
               "isBase64Encoded": False,
               "statusCode": 200,
-              "body": "Action completed",
               "headers": {
                 "content-type": "application/json"
-              }
+              },
+              "body": "{\"type\": 2}"
             }
