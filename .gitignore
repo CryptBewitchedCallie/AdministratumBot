@@ -4,4 +4,5 @@ Resources/
 .aws-sam/build/
 # Local settings
 .idea/
-
+# Saved config settings that include secure information (bot key)
+samconfig.toml

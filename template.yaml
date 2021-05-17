@@ -72,6 +72,10 @@ Resources:
       Description: Funcion that authenticates (or rejects) the message sent from Discord
       Handler: Lambda_Function.lambda_handler
       CodeUri: Lambda/AuthFunction/
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName:
+              Ref: GetWebhookFunction
       Layers:
         - !Ref PyNaClLayer
       Events:
@@ -104,6 +108,10 @@ Resources:
       Description: Funcion that identifies the appropriate webhook URL for the message
       Handler: Lambda_Function.lambda_handler
       CodeUri: Lambda/GetWebhookFunction/
+      Policies:
+        - LambdaInvokePolicy:
+            FunctionName:
+              Ref: SendWebhookFunction
       Environment:
         Variables:
           APP_ID:
