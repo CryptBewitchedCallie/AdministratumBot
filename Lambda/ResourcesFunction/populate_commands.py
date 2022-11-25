@@ -7,7 +7,7 @@ import time
 
 # import environment variables
 S3_BUCKET = os.environ['S3_BUCKET']
-APPLICATION_ID = os.environ['APPLICATION_ID']
+APPLICATION_ID = os.environ['APP_ID']
 BOT_TOKEN = os.environ['BOT_TOKEN']
 # initialise global variables/resources
 http = urllib3.PoolManager()

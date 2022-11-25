@@ -58,6 +58,11 @@ Resources:
             Effect: Allow
             Resource: !Join [ "", [ "arn:aws:s3:::", !Ref S3ResourceStorage, "/Resources/*" ] ]
             Principal: '*'
+          - Action:
+              - 's3:ListBucket'
+            Effect: Allow
+            Resource: !Join [ "", [ "arn:aws:s3:::", !Ref S3ResourceStorage ] ]
+            Principal: '*'
 
 # The API gateway setup that Discord will talk to
   AdministratumAPIGateway:

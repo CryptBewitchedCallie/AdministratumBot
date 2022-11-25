@@ -27,6 +27,19 @@ def create_webhook(channel_id):
     return http.request('POST', webhook_url, headers=webhook_headers, body=webhook_content)
 
 
+def find_webhook(all_webhooks, channel_id):
+    webhook_token = ''
+    webhook_id = ''
+    webhook_found = False
+    for webhook_object in json.loads(all_webhooks):
+        # print(f"webhook_object {webhook_object}")  # debug
+        if webhook_object.get('application_id') == APP_ID and webhook_object.get('channel_id') == channel_id:
+            webhook_token = webhook_object.get('token')
+            webhook_id = webhook_object.get('id')
+            webhook_found = True
+    return webhook_found, webhook_id, webhook_token
+
+
 def call_next_lambda(event):
     client = boto3.client("lambda")
     client.invoke(
@@ -49,7 +62,6 @@ def ack_interaction(body):
 
 def lambda_handler(event, context):
     # print(f"event {event}")  # debug print
-
     body = json.loads(event.get('body'))
     channel_id = body.get('channel_id')
 
@@ -67,14 +79,14 @@ def lambda_handler(event, context):
         r = create_webhook(channel_id)
 
     # get the right token for this app/channel combo
-    webhook_token = ''
-    webhook_id = ''
+    all_webhooks = r.data.decode('utf-8')
     # print(f"r.data.decode {r.data.decode('utf-8')}")  # debug
-    for webhook_object in json.loads(r.data.decode('utf-8')):
-        # print(f"webhook_object {webhook_object}")  # debug
-        if webhook_object.get('application_id') == APP_ID and webhook_object.get('channel_id') == channel_id:
-            webhook_token = webhook_object.get('token')
-            webhook_id = webhook_object.get('id')
+    webhook_found, webhook_id, webhook_token = find_webhook(all_webhooks, channel_id)
+    # if there wasn't a matching webhook then create one and get the IDs and all
+    if not webhook_found:
+        r = create_webhook(channel_id)
+        all_webhooks = r.data.decode('utf-8')
+        webhook_found, webhook_id, webhook_token = find_webhook(all_webhooks, channel_id)
 
     # create webhook URL from the response
     webhook_url = f"https://discord.com/api/webhooks/{webhook_id}/{webhook_token}"
