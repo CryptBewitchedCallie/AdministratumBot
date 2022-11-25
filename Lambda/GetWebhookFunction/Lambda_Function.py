@@ -38,17 +38,17 @@ def call_next_lambda(event):
 
 def ack_interaction(body):
     # acknowledge the interaction
-    print(f"body {body}")
+    # print(f"body {body}")
     interaction_id = body.get('id')
     interaction_token = body.get('token')
     response_url = f"https://discord.com/api/v8/interactions/{interaction_id}/{interaction_token}/callback"
     ack_object = json.dumps({"type": 4, "data": {"content": "instruction received!"}}) .encode('utf-8')
     r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
-    print(f"response data {r.data}")
+    # print(f"response data {r.data}")
 
 
 def lambda_handler(event, context):
-    print(f"event {event}")  # debug print
+    # print(f"event {event}")  # debug print
 
     body = json.loads(event.get('body'))
     channel_id = body.get('channel_id')
@@ -60,6 +60,7 @@ def lambda_handler(event, context):
     webhook_url = f"https://discord.com/api/v8/channels/{channel_id}/webhooks"
     webhook_headers = {'Authorization': f'Bot {BOT_TOKEN}'}
     r = http.request('GET', webhook_url, headers=webhook_headers)
+    # print(f"r.data {r.data}")  # debug print
 
     # If no existing webhooks create one
     if r.data == b'[]':
@@ -68,9 +69,10 @@ def lambda_handler(event, context):
     # get the right token for this app/channel combo
     webhook_token = ''
     webhook_id = ''
-    for webhook in json.loads(r.data.decode('utf-8')):
-        webhook_object = json.loads(webhook)
-        if (webhook_object.get('application_id') == APP_ID and webhook_object.get('channel_id') == channel_id):
+    # print(f"r.data.decode {r.data.decode('utf-8')}")  # debug
+    for webhook_object in json.loads(r.data.decode('utf-8')):
+        # print(f"webhook_object {webhook_object}")  # debug
+        if webhook_object.get('application_id') == APP_ID and webhook_object.get('channel_id') == channel_id:
             webhook_token = webhook_object.get('token')
             webhook_id = webhook_object.get('id')
 

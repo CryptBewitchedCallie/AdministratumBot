@@ -20,7 +20,8 @@ Before deploying update the Parameters section with the required values for your
 
 Ensure all is up-to-date and use the AWS SAM CLI to build and run locally within the AdministratumBot top directory:
 * sam build
-* sam deploy --guided --profile YourSavedAWSCredentialsProfile
+* sam deploy --guided --profile YourSavedAWSCredentialsProfile --no-fail-on-empty-changeset
+* roll back auth function to 3.8 in the AWS console (temp fix for my laziness)
 
 After that note the POST endpoint from API Gateway and update the Interactions Endpoint URL under the Applications section of the Discord Developer Portal. If set up correctly this will accept the URL.
 

@@ -7,7 +7,7 @@ Globals:
   Function:
     Timeout: 900
     MemorySize: 128
-    Runtime: python3.8
+    Runtime: python3.9
 # define environment variables
 Parameters:
   GLOBALAPPID:
@@ -69,7 +69,7 @@ Resources:
   AuthFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Funcion that authenticates (or rejects) the message sent from Discord
+      Description: Function that authenticates (or rejects) the message sent from Discord
       Handler: Lambda_Function.lambda_handler
       CodeUri: Lambda/AuthFunction/
       Policies:
@@ -105,7 +105,7 @@ Resources:
   GetWebhookFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Funcion that identifies the appropriate webhook URL for the message
+      Description: Function that identifies the appropriate webhook URL for the message
       Handler: Lambda_Function.lambda_handler
       CodeUri: Lambda/GetWebhookFunction/
       Policies:
@@ -130,7 +130,7 @@ Resources:
   SendWebhookFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Funcion that sends the requested webhook to the channel
+      Description: Function that sends the requested webhook to the channel
       Handler: Lambda_Function.lambda_handler
       CodeUri: Lambda/SendWebhookFunction/
       Environment:
@@ -143,7 +143,7 @@ Resources:
   RegisterResourceFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Description: Funcion that registers slash commands based on the S3 bucket's Resources directory
+      Description: Function that registers slash commands based on the S3 bucket's Resources directory
       Handler: populate_commands.lambda_handler
       CodeUri: Lambda/ResourcesFunction/
       Environment:
