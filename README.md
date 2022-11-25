@@ -11,6 +11,21 @@ Config files (for some at least) are already created in the /Lambda/RunConfigura
 
 **NOTE:** the Auth function can't be run locally until I figure out WTF to do with the PyNaCl layer
 
+# Deploying to Discord
+
+* In the Discord developer portal navigate to Applications then Create New Application
+* On the General screen take a not of the App ID and Public Key
+* On the Bot screen take a note of the Token 
+* Deploy to AWS (see the section below) with the IDs/tokens/etc you noted above
+* Upload your image files to a "Resources/" directory on the S3 created during AWS deployment... but make sure the file names are in lower case, the file types are in uppre case, and they're all .PNG files (I'm sorry! I promise I'll fix this!)
+* Open the AWS Console, go to Lambdas, and find the RegisterResourceFunction Lambda
+* In that function run (can use "Test" and a blank event)
+* in the AWS Console go to API Gateway, find the deployed API, go to Stages, open the "test", navigate down to "/Administratum POST" and copy the Invoke URL
+* Return to the Discord developer portal, go to your Application on the General Information screen and paste the URL into the "Interactions Endpoint URL"
+* Go to Oauth2 then General and put the same URL in as the redirect URL
+* Under OAuth2 go to URL Generator. Select "applications.commands"and "bot" in the top set, then "send messages" and "manage webhooks" in the bottom set
+* Visit the generated link and authorise the application to connect to your server
+
 # Deploying to AWS
 Requirements: AWS SAM CLI, Application and Bot registered in Discord
 
