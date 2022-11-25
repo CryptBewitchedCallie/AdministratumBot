@@ -14,12 +14,11 @@ def lambda_handler(event, context):
 
     # find the file to pick up
     command = body['data']['name']
-
     # send the webhook
     webhook_url = event.get('webhook_url')
     webhook_object = json.dumps({
-        "username": "administratum_test",
-        "avatar_url": "https://logos-download.com/wp-content/uploads/2016/02/warhammer-40000-and_bird_logo.png",
+        "username": os.environ['WEBHOOK_NAME'],
+        "avatar_url": os.environ['WEBHOOK_AVATAR'],
         "embeds": [{"image": {"url": f"https://{S3_BUCKET}.s3-eu-west-1.amazonaws.com/Resources/{command}.PNG"}}]
     }).encode('utf-8')
     r = http.request('POST', webhook_url, headers={'Content-Type': 'application/json'}, body=webhook_object)

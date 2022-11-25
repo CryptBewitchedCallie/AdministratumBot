@@ -6,8 +6,6 @@ import urllib3
 # environment variables
 PUBLIC_KEY = os.environ['PUBLIC_KEY']
 APP_ID = os.environ['APP_ID']
-WEBHOOK_NAME = os.environ['WEBHOOK_NAME']
-WEBHOOK_AVATAR = os.environ['WEBHOOK_AVATAR']
 BOT_TOKEN = os.environ['BOT_TOKEN']
 NEXT_LAMBDA = os.environ['NEXT_LAMBDA']
 # global variables

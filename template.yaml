@@ -123,10 +123,6 @@ Resources:
             Ref: GLOBALAPPID
           PUBLIC_KEY:
             Ref: GLOBALPUBLICKEY
-          WEBHOOK_NAME:
-            Ref: GLOBALWEBHOOKNAME
-          WEBHOOK_AVATAR:
-            Ref: GLOBALWEBHOOKAVATAR
           BOT_TOKEN:
             Ref: GLOBALBOTTOKEN
           NEXT_LAMBDA:
@@ -144,6 +140,10 @@ Resources:
             Ref: GLOBALAPPID
           S3_BUCKET:
             Ref: GLOBALS3BUCKET
+          WEBHOOK_NAME:
+            Ref: GLOBALWEBHOOKNAME
+          WEBHOOK_AVATAR:
+            Ref: GLOBALWEBHOOKAVATAR
 
   RegisterResourceFunction:
     Type: AWS::Serverless::Function
