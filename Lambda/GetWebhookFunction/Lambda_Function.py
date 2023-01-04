@@ -8,6 +8,8 @@ PUBLIC_KEY = os.environ['PUBLIC_KEY']
 APP_ID = os.environ['APP_ID']
 BOT_TOKEN = os.environ['BOT_TOKEN']
 NEXT_LAMBDA = os.environ['NEXT_LAMBDA']
+WEBHOOK_NAME = os.environ['WEBHOOK_NAME']
+WEBHOOK_AVATAR = os.environ['WEBHOOK_AVATAR']
 # global variables
 http = urllib3.PoolManager()
 

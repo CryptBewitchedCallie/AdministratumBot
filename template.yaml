@@ -125,6 +125,10 @@ Resources:
             Ref: GLOBALPUBLICKEY
           BOT_TOKEN:
             Ref: GLOBALBOTTOKEN
+          WEBHOOK_NAME:
+            Ref: GLOBALWEBHOOKNAME
+          WEBHOOK_AVATAR:
+            Ref: GLOBALWEBHOOKAVATAR
           NEXT_LAMBDA:
             Ref: SendWebhookFunction
 
