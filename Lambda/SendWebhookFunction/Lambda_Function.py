@@ -21,7 +21,19 @@ def lambda_handler(event, context):
         "avatar_url": os.environ['WEBHOOK_AVATAR'],
         "embeds": [{"image": {"url": f"https://{S3_BUCKET}.s3-eu-west-1.amazonaws.com/Resources/{command}.PNG"}}]
     }).encode('utf-8')
-    r = http.request('POST', webhook_url, headers={'Content-Type': 'application/json'}, body=webhook_object)
+
+    try:
+        r = http.request('POST', webhook_url, headers={'Content-Type': 'application/json'}, body=webhook_object)
+    except:
+        return {
+            "isBase64Encoded": False,
+            "statusCode": 500,
+            "body": "Something bad happened",
+            "headers": {
+                "content-type": "application/json"
+            }
+        }
+
 
     # API call complete
     return {
