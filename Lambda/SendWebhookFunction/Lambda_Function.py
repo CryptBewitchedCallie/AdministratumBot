@@ -1,24 +1,48 @@
 import os
 import json
 import urllib3
+import boto3
+import base64
+from botocore.exceptions import ClientError
 
-APP_ID = os.environ['APP_ID']
-S3_BUCKET = os.environ['S3_BUCKET']
+SECRET_ARN = os.environ['SECRET_ARN']
+REGION = os.environ['REGION']
+# global variables
+http = urllib3.PoolManager()
+APP_ID = ''
+S3_BUCKET = ''
+
+
+def ack_interaction(body, ack_type):
+    # acknowledge the interaction
+    # print(f"body {body}")
+    interaction_id = body.get('id')
+    interaction_token = body.get('token')
+    response_url = f"https://discord.com/api/v8/interactions/{interaction_id}/{interaction_token}/callback"
+    ack_object = json.dumps({"type": ack_type, "data": {"content": "instruction received!"}}) .encode('utf-8')
+    r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
+    print(f"ack response data {r.data}")
 
 
 def lambda_handler(event, context):
     print(f"event {event}")  # debug print
 
-    http = urllib3.PoolManager()
     body = json.loads(event.get('body'))
+
+    # get the secret manager bits
+    secret = get_secret()
+    global APP_ID
+    APP_ID = secret['APP_ID']
+    global S3_BUCKET
+    S3_BUCKET = secret['S3_BUCKET']
 
     # find the file to pick up
     command = body['data']['name']
     # send the webhook
     webhook_url = event.get('webhook_url')
     webhook_object = json.dumps({
-        "username": os.environ['WEBHOOK_NAME'],
-        "avatar_url": os.environ['WEBHOOK_AVATAR'],
+        "username": secret['WEBHOOK_NAME'],
+        "avatar_url": secret['WEBHOOK_AVATAR'],
         "embeds": [{"image": {"url": f"https://{S3_BUCKET}.s3-eu-west-1.amazonaws.com/Resources/{command}.PNG"}}]
     }).encode('utf-8')
 
@@ -33,7 +57,8 @@ def lambda_handler(event, context):
                 "content-type": "application/json"
             }
         }
-
+    # Acknowledge the interaction to say we're working on things
+    # ack_interaction(body, 4)
 
     # API call complete
     return {
@@ -44,3 +69,27 @@ def lambda_handler(event, context):
             "content-type": "application/json"
         }
     }
+
+
+def get_secret():
+    # # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=REGION
+    )
+    try:
+        get_secret_value_response=client.get_secret_value(
+            SecretId=SECRET_ARN
+        )
+    except ClientError as e:
+        raise e
+    else:
+        # Decrypts secret using the associated KMS CMK.
+        # Depending on whether the secret is a string or binary, one of these fields will be populated.
+        if 'SecretString' in get_secret_value_response:
+            secret = get_secret_value_response['SecretString']
+        else:
+            secret = base64.b64decode(get_secret_value_response['SecretBinary'])
+    secret = json.loads(secret)
+    return secret
