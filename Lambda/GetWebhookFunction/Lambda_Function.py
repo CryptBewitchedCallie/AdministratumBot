@@ -53,26 +53,11 @@ def call_next_lambda(event):
     )
 
 
-def ack_interaction(body, ack_type):
-    # acknowledge the interaction
-    # print(f"body {body}")
-    interaction_id = body.get('id')
-    interaction_token = body.get('token')
-    response_url = f"https://discord.com/api/v8/interactions/{interaction_id}/{interaction_token}/callback"
-    ack_object = json.dumps({"type": ack_type, "data": {"content": "instruction received!"}}) .encode('utf-8')
-    r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
-    print(f"ack response data {r.data}")
-
-
 def lambda_handler(event, context):
     print(f"event {event}")  # debug print
 
     body = json.loads(event.get('body'))
     channel_id = body.get('channel_id')
-
-    # Acknowledge the interaction to say we're working on things
-    # except commented out, the auth function does an initial stage of this and now I'm not sure which part is achieving what
-    # ack_interaction(body, 1)
 
     # fetch the required secrets and other configuration data
     secret = get_secret()

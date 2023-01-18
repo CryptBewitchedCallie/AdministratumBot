@@ -13,17 +13,6 @@ APP_ID = ''
 S3_BUCKET = ''
 
 
-def ack_interaction(body, ack_type):
-    # acknowledge the interaction
-    # print(f"body {body}")
-    interaction_id = body.get('id')
-    interaction_token = body.get('token')
-    response_url = f"https://discord.com/api/v8/interactions/{interaction_id}/{interaction_token}/callback"
-    ack_object = json.dumps({"type": ack_type, "data": {"content": "instruction received!"}}) .encode('utf-8')
-    r = http.request('POST', response_url, headers={'Content-Type': 'application/json'}, body=ack_object)
-    print(f"ack response data {r.data}")
-
-
 def lambda_handler(event, context):
     print(f"event {event}")  # debug print
 
@@ -57,8 +46,6 @@ def lambda_handler(event, context):
                 "content-type": "application/json"
             }
         }
-    # Acknowledge the interaction to say we're working on things
-    # ack_interaction(body, 4)
 
     # API call complete
     return {
