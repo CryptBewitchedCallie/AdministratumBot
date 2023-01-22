@@ -4,19 +4,18 @@ import re
 import boto3
 import urllib3
 import time
+import base64
+from botocore.exceptions import ClientError
 
 # import environment variables
-S3_BUCKET = os.environ['S3_BUCKET']
-APPLICATION_ID = os.environ['APP_ID']
-BOT_TOKEN = os.environ['BOT_TOKEN']
+SECRET_ARN = os.environ['SECRET_ARN']
+REGION = os.environ['REGION']
 # initialise global variables/resources
 http = urllib3.PoolManager()
-slash_url = f"https://discord.com/api/v8/applications/{APPLICATION_ID}/commands"
-slash_headers = {'Content-Type': 'application/json', 'Authorization': f'Bot {BOT_TOKEN}'}
 slash_responses = [200, 201]  # acceptable HTTP responses
 
 
-def create_slash_command(slash_object):
+def create_slash_command(slash_url, slash_headers, slash_object):
     slasher = re.search('Resources/(.+?).PNG', slash_object.get('Key'))
     if slasher:
         slash_command = json.dumps({
@@ -39,12 +38,44 @@ def create_slash_command(slash_object):
 
 def lambda_handler(event, context):
     client = boto3.client("s3")
-    slash_objects = client.list_objects_v2(Bucket=f"{S3_BUCKET}", Prefix="Resources/").get('Contents')
+
+    secret = get_secret()
+    app_id = secret['APP_ID']
+    bot_token = secret['BOT_TOKEN']
+    s3_bucket = secret['S3_BUCKET']
+
+    slash_url = f"https://discord.com/api/v8/applications/{app_id}/commands"
+    slash_headers = {'Content-Type': 'application/json', 'Authorization': f'Bot {bot_token}'}
+    slash_objects = client.list_objects_v2(Bucket=f"{s3_bucket}", Prefix="Resources/").get('Contents')
 
     for slash_object in slash_objects:
-        create_slash_command(slash_object)
+        create_slash_command(slash_url, slash_headers, slash_object)
     
     return {
         'statusCode': 200,
         'body': json.dumps('All commands registered!')
     }
+
+
+def get_secret():
+    # # Create a Secrets Manager client
+    session = boto3.session.Session()
+    client = session.client(
+        service_name='secretsmanager',
+        region_name=REGION
+    )
+    try:
+        get_secret_value_response=client.get_secret_value(
+            SecretId=SECRET_ARN
+        )
+    except ClientError as e:
+        raise e
+    else:
+        # Decrypts secret using the associated KMS CMK.
+        # Depending on whether the secret is a string or binary, one of these fields will be populated.
+        if 'SecretString' in get_secret_value_response:
+            secret = get_secret_value_response['SecretString']
+        else:
+            secret = base64.b64decode(get_secret_value_response['SecretBinary'])
+    secret = json.loads(secret)
+    return secret

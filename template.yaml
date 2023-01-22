@@ -52,7 +52,7 @@ Resources:
             Resource: !Join [ "", [ "arn:aws:s3:::", !Ref S3ResourceStorage ] ]
             Principal: '*'
 
-# The API gateway setup that Discord will talk to
+# The API gateway setup that Discord will talk to (auth handled in the auth Lambda so not needed here)
   AdministratumAPIGateway:
     Type: AWS::Serverless::Api
     Properties:
@@ -64,6 +64,7 @@ Resources:
   AuthFunction:
     Type: AWS::Serverless::Function
     Properties:
+      Runtime: python3.8
       Description: Function that authenticates (or rejects) the message sent from Discord
       Handler: Lambda_Function.lambda_handler
       CodeUri: Lambda/AuthFunction/
